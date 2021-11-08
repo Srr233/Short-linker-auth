@@ -1,2 +1,1 @@
-import { v1 as uuidv1 } from 'uuid';
-export default uuidv1();
+export default '4f777040-407d-11ec-8065-379c9cd90c5b';

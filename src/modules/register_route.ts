@@ -1,28 +1,19 @@
 import express, { Request, Response } from 'express';
 import SECRET_KEY from '../general data/secret_key';
-import jwt from 'jsonwebtoken';
-import {createNewUser} from '../modules/mongoose';
+import {sign_up} from '../modules/mongoose';
+import token from './token';
+
 
 const router = express.Router();
 
-const register = (req: Request, res: Response) => {
+const register = async (req: Request, res: Response) => {
     const {login, password} = req.body;
-    let newAuth_token = null;
-    createNewUser('ser', 'ser');
-    // if (user?.password === password) {
-    //     newAuth_token = jwt.sign({
-    //         login,
-    //         password
-    //     }, SECRET_KEY, {expiresIn: "25m"});
-    //     res.send(JSON.stringify({auth_token: newAuth_token}));
-    //     return;
-    // }
-    // res.sendStatus(403);
-    newAuth_token = jwt.sign({
-        login,
-        password
-    }, SECRET_KEY, {expiresIn: "25m"});
-    res.send(JSON.stringify({auth_token: newAuth_token}));
+    if (!login || !password) {
+        res.sendStatus(400);
+        return;
+    }
+    const newUser = await sign_up(login, password);
+    res.send(JSON.stringify({auth_token: token(newUser.login, newUser.password)}));
 }
 router.post('/', express.json(), register);
 router.get('/', (_, res) => res.sendStatus(200));
