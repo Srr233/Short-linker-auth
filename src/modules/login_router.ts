@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import SECRET_KEY from '../general data/secret_key';
 import token from './token';
 import {sign_in} from '../modules/mongoose';
 
@@ -13,7 +12,7 @@ const login = async (req: Request, res: Response) => {
         return;
     }
     const user = await sign_in(login, password);
-    if (user) {
+    if (user && user.isActivated) {
         res.send(JSON.stringify({
                 auth_token: token(user.login, user.password)
             }));
