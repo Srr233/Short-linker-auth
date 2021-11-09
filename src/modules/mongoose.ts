@@ -27,7 +27,7 @@ const sign_up = async (login: string, password: string, email: string) => {
 const sign_in = async (login: string, password: string) => {
     const user = await User.findOne({ login });
     if (!user) return false
-    if (!user.activated) return false;
+    if (!user.isActivated) return false;
     const passHash = await bcryptjs.compare(password, user.password);
     if (!passHash) return false;
     return user;
