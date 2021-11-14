@@ -12,7 +12,6 @@ const sign_up = async (login: string, password: string, email: string) => {
         password: passHash,
         isActivated: false,
         activateId,
-        links: []
     });
     await newUser.save();
     sendMessageToEmail(email, {
