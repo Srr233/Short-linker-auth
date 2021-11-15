@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import User from '../general data/mongo_scheme';
 
-// https:// 124125412adaw-124512faw-1241d-125e12d_ewoiaWQiOiAxMjMxMwp9 (base64)
 const router = express.Router();
 
 const verify = async (req: Request, res: Response) => {
