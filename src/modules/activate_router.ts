@@ -1,24 +1,29 @@
 import express, { Request, Response } from 'express';
-import User from '../general data/mongo_scheme';
+import mongoose from 'mongoose';
+import { User_interface } from '../interfaces/interfaces';
 
-// https:// 124125412adaw-124512faw-1241d-125e12d_ewoiaWQiOiAxMjMxMwp9 (base64)
-const router = express.Router();
+function createRouter (connection: mongoose.Model<User_interface> ) {
 
-const verify = async (req: Request, res: Response) => {
-    const activateId= req.query.activateId?.toString();
-
-    if (activateId) {
-        const currentUser = await User.findOne({activateId});
-        if (currentUser) {
-            currentUser.isActivated = true;
-            currentUser.save();
-            res.sendStatus(200);
-            return;
+    const router = express.Router();
+    
+    const verify = async (req: Request, res: Response) => {
+        const activateId= req.query.activateId?.toString();
+    
+        if (activateId) {
+            const currentUser = await connection.findOne({activateId});
+            if (currentUser) {
+                currentUser.isActivated = true;
+                currentUser.save();
+                res.send('<h1>Great! Now you can sign in!</h1>');
+                return;
+            }
         }
+        res.sendStatus(401);
     }
-    res.sendStatus(401);
-}
-router.post('/', verify);
-router.get('/', (_, res) => res.sendStatus(200));
+    router.get('/', verify);
+    router.get('/', (_, res) => res.sendStatus(200));
 
-export default router;
+    return router;
+}
+
+export default createRouter;
