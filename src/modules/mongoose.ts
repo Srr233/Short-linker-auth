@@ -19,7 +19,7 @@ const sign_up = async (login: string, password: string, email: string, connectio
     sendMessageToEmail(email, {
         Subject: 'Activate Share-linker link!',
         TextPart: 'Click the link and activate your account!',
-        HTMLPart: `<h3>Activate the link! Be our participant!: </h3><a>http://localhost:3000/verify?activateId=${activateId}</a>`,
+        HTMLPart: `<h3>Activate the link! Be our participant!: </h3><a>https://short-linker-auth.herokuapp.com/verify?activateId=${activateId}</a>`,
         CustomID: activateId
     })
     return newUser;
