@@ -18,17 +18,21 @@ function createRouter(connection_user: mongoose.Model<User_interface>, connectio
         const user = await sign_in(login, password, connection_user);
         if (user && user.isActivated) {
             const user_link = await connection_user_links.findOne({login});
-            if (!user_link) {
-                res.sendStatus(500); // have to change the error code
-                return;
-            }
-            if (user_link.login === login) {
-                const links = user_link.links;
-                res.send(JSON.stringify({
+            if (user_link) {
+                if (user_link.login === login) {
+                    const links = user_link.links;
+                    res.send(JSON.stringify({
                         auth_token: token(user.login, user.password),
                         links
                     }));
+                    return;
+                }
+                res.sendStatus(401);
+                return;
             }
+            res.send(JSON.stringify({
+                auth_token: token(user.login, user.password),
+            }));
             return;
         }
         res.sendStatus(401);
