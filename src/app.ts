@@ -7,14 +7,25 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import {userURL, user_linksURL} from './general data/mongo_uri';
 import create_schemes from './general data/mongo_scheme';
+import creds from './general data/creds';
 
 const env_port = process.env.PORT || 3000;
 
 const app = express();
 
 const start = async () => {
-    const connection_user = await mongoose.createConnection(userURL);
-    const connection_user_links = await mongoose.createConnection(user_linksURL);
+    const connection_user = await mongoose.createConnection(userURL, {
+        auth: {
+            username: creds.user,
+            password: creds.pwd
+        }
+    });
+    const connection_user_links = await mongoose.createConnection(user_linksURL, {
+        auth: {
+            username: creds.user,
+            password: creds.pwd
+        }
+    });
     const schemes = create_schemes(connection_user, connection_user_links);
 
     app.use(cors(cors_options));
