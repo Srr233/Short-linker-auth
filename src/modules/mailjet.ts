@@ -14,7 +14,7 @@ const sendMessageToEmail = (to: string, options: Options) => {
             {
                 From: {
                     Email: "sr233@yandex.ru",
-                    Name: "Siarhei"
+                    Name: "Share-linker"
                 },
                 To: [
                     {
